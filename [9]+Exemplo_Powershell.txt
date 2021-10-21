@@ -1,0 +1,19 @@
+Módulo 9: Exemplo de Comandos Powershell
+
+[1] Login-AzureRmAccount  [Loga na conta Azure]
+
+[2] Register-AzureRmResourceProvider -ProviderNamespace "Microsoft.RecoveryServices"
+
+[3] $vault="BKP-VAULT-BR"
+    $rg="AZR-BR"
+	$loc="brazilsouth"
+
+     New-AzureRmRecoveryServicesVault -Name $vault -ResourceGroupName $rg -Location $loc
+
+[4] $vault1=Get-AzureRmRecoveryServicesVault -Name $vault 
+    Set-AzureRmRecoveryServicesBackupProperties -vault $vault1 -BackupStorageRedundancy LocallyRedundant
+
+[5] cd c:/
+    mkdir C:\azure_creds
+    $dir = "C:\azure_creds"
+    $arquivo_cred = Get-AzureRmRecoveryServicesVaultSettingsFile -Backup -Vault $vault1 -Path $dir

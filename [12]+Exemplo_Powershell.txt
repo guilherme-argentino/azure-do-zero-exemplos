@@ -1,0 +1,29 @@
+Módulo 12: Exemplo de Comandos Powershell
+
+[1] Entrar na Subscription Mãe
+
+[2] Azure Active Directory
+
+[3] Convidar Guest User (pois ele não está dentro do meu domínio)
+
+[4] O usuário guest irá receber o convite por email.
+
+[5] O usuário tem que aceitar o convite
+
+[6] Depois que ele aceitar, ele pode logar no portal.azure.com
+
+[7] Conceder permissões:
+
+$rg="AZR-BR"
+
+$idconta="id-da-assinatura"
+
+New-AzureRmRoleAssignment -ObjectId $idconta -RoleDefinitionName "Contributor" -ResourceGroupName $rg [8] Remover as permissões: Remove-AzureRmRoleAssignment -ObjectId $idconta -RoleDefinitionName "Contributor" -ResourceGroupName $rg
+
+Um Forte Abraço,
+
+Até o próximo módulo! ;)
+
+Gustavo Magella 
+
+gustavomagella.com

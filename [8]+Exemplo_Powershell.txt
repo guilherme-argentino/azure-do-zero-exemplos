@@ -1,0 +1,64 @@
+Módulo 8: Exemplo de Comandos Powershell
+
+[1] Login-AzureRmAccount  [Loga na conta Azure]
+
+[2] $loc="centralus"
+    Get-AzureRMVMImagePublisher -Location $loc | Select PublisherName
+
+[3] $pub="MicrosoftWindowsServer"
+    Get-AzureRMVMImageOffer -Location $loc -Publisher $pub | Select Offer
+
+[4] $offer="WindowsServer"
+    Get-AzureRMVMImageSku -Location $loc -Publisher $pub -Offer $offer | Select Skus
+
+[5] $sku="2016-Datacenter"
+    
+[6] Get-AzureRmVMSize -Location $loc [Checar tamanhos de máquinas disponíveis em sua região]
+	$vmsize="Standard_A2_v2"
+
+[7] IP_Publico
+
+$rg='AZR-EUA'
+$ippub='IP-PUB-WS16-DC-EUA'
+
+$pip = New-AzureRmPublicIpAddress -ResourceGroupName $rg -Location $loc -AllocationMethod Static -IdleTimeoutInMinutes 4 -Name $ippub
+
+[8] NSG | Porta 3389 e 80
+
+$nsgRuleRDP = New-AzureRmNetworkSecurityRuleConfig -Name Permitir_RDP  -Protocol Tcp `
+    -Direction Inbound -Priority 1000 -SourceAddressPrefix * -SourcePortRange * -DestinationAddressPrefix * `
+    -DestinationPortRange 3389 -Access Allow
+
+$nsgRuleWeb = New-AzureRmNetworkSecurityRuleConfig -Name Permitir_WWW  -Protocol Tcp `
+    -Direction Inbound -Priority 1001 -SourceAddressPrefix * -SourcePortRange * -DestinationAddressPrefix * `
+    -DestinationPortRange 80 -Access Allow
+
+[9] NSG_CRIAÇÃO_DO_NSG
+
+$nsgname='NSG-WS16-DC-EUA'
+$nsg = New-AzureRmNetworkSecurityGroup -Name $nsgname -ResourceGroupName $rg -Location $loc -SecurityRules $nsgRuleRDP,$nsgRuleWeb
+
+[10] NIC_CRIAÇÃO_DE_PLACA_DE_REDE_COM_IP_PÚBLICO_CRIADO
+
+$nicname='NIC-WS16-DC-EUA'
+
+$vnet = "VNET-AZR-EUA" 
+$vnetinfo = Get-AzureRmVirtualNetwork -Name $vnet -ResourceGroupName $rg | Get-AzureRmVirtualNetworkSubnetConfig -Name "ServersSubnet"
+$nic = New-AzureRmNetworkInterface -Name $nicname -ResourceGroupName $rg -Location $loc  -SubnetId $vnetinfo.Id -PublicIpAddressId $pip.Id -NetworkSecurityGroupId $nsg.Id
+
+[11] DEFINIR_UM_OBJETO_DE_CREDENCIAL
+
+$usr = "gmagella"
+$pwd =  ConvertTo-SecureString -String "AzureCurso;123" -AsPlainText -Force
+$credinfo = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $usr, $pwd
+
+
+[12] VM_CARREGAR_CONFIGURAÇÃO_VM
+
+$vmname='WS16-DC-EUA'
+
+$vmConfig = New-AzureRmVMConfig -VMName $vmname -VMSize $vmsize | Set-AzureRmVMOperatingSystem -Windows -ComputerName $vmname -Credential $credinfo | Set-AzureRmVMSourceImage -PublisherName $pub -Offer $offer -Skus $sku -Version latest | Add-AzureRmVMNetworkInterface -Id $nic.Id
+
+[13] CRIAR VM
+
+New-AzureRmVM -ResourceGroupName $rg -Location $loc -VM $vmConfig

@@ -1,0 +1,20 @@
+Módulo 10: Exemplo de Comandos Powershell
+
+[1] Login-AzureRmAccount
+
+[2] $rg = "AZR-BR"
+    $location = "Central US"
+    $srvname = "sql-srv-azr-br"
+    $admpwd = ConvertTo-SecureString "Senha@123" -AsPlainText -Force
+    $sqlusr = "admsql"
+    $dbname = "DB01"
+    $cred = New-Object System.Management.Automation.PSCredential -Argumentlist $sqlusr, $admpwd
+
+[3] New-AzureRmSqlServer -ResourceGroupName $rg -ServerName $srvname -Location $location -SqlAdministratorCredentials $cred 
+
+[4] $database = New-AzureRmSqlDatabase  -ResourceGroupName $rg `
+       -ServerName $srvname `
+       -DatabaseName $dbname `
+       -RequestedServiceObjectiveName "S0" `
+
+	
