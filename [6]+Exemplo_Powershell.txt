@@ -1,0 +1,18 @@
+
+Módulo 6: Exemplo de Comandos Powershell
+
+
+[1] Login-AzureRmAccount   [Loga na conta Azure]
+
+[2] Get-AzureRmResourceGroup  [Lista todos os Grupos de Recursos que existem na Assinatura]
+
+[3] Get-AzureRmLocation | select Location  {Lista todas as localizações possíveis para se criar um grupo de recurso]
+
+[4] New-AzureRmResourceGroup -ResourceGroupName "AZR-EUA" -Location "centralus"  [Cria um Grupo de Recurso]
+
+Um Forte Abraço,
+
+Até o próximo módulo! ;)
+
+Gustavo Magella
+gustavomagella.com

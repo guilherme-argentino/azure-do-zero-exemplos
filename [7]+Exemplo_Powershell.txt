@@ -1,0 +1,9 @@
+Módulo 7: Exemplo de Comandos Powershell
+
+[1] Login-AzureRmAccount  [Loga na conta Azure]
+
+[2] Get-AzureRmVirtualNetwork -ResourceGroupName AZR-BR
+
+[3] $subnet1 = New-AzureRmVirtualNetworkSubnetConfig -Name "ServersSubnet" -AddressPrefix 10.2.0.0/25
+
+[4] New-AzureRmVirtualNetwork -Name "VNET-AZR-EUA" -ResourceGroupName "AZR-EUA" -Location "centralus" -AddressPrefix 10.2.0.0/24 -Subnet $subnet1
